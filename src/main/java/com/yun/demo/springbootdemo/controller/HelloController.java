@@ -15,45 +15,50 @@ public class HelloController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    String resultTemplate = "{\"hello\": \"hello, spring boot.<br>database count: <strong>#databaseCount#</strong><br>redis count: <strong>#redisCount#</strong>\"}";
-
     @GetMapping("/hello")
     public String hello() {
         String sql = "select count(*) from count";
         String databaseCount =  jdbcTemplate.queryForObject(sql, String.class);
 
+        stringRedisTemplate.opsForValue().setIfAbsent("count:","1");
         String redisCount = stringRedisTemplate.opsForValue().get("count");
         if(redisCount == null) {
-            stringRedisTemplate.opsForValue().set("count", "1");
-            redisCount = "1";
+            return result("201", "redis value is null!", "-1");
         }
 
-        return this.resultTemplate.replace("#databaseCount#", databaseCount)
-                                .replace("#redisCount#", redisCount);
+        return result("101", "ok", data(databaseCount, redisCount));
     }
 
     @GetMapping("/count/add")
     public String addCount() {
-        String result = "{\"code\": \"#code#\", \"message\": \"#message#\", \"data\": \"#data#\"}";
-
         String sql = "insert into count (`time`) value (now())";
         if(jdbcTemplate.update(sql) < 1) {
-            return result.replace("#code#", "201")
-                    .replace("#message#", "insert into db error!")
-                    .replace("#data#", "null");
+            return result("201", "insert into database error!", "-1");
         }
         String countSql = "select count(*) from count";
         String databaseCount =  jdbcTemplate.queryForObject(countSql, String.class);
 
         stringRedisTemplate.opsForValue().setIfAbsent("count:","1");
-        Integer redisCount = Integer.valueOf(stringRedisTemplate.opsForValue().get("count"));
-        stringRedisTemplate.opsForValue().set("count", (++redisCount).toString());
+        Integer count = Integer.valueOf(stringRedisTemplate.opsForValue().get("count"));
+        String redisCount = (++count).toString();
+        stringRedisTemplate.opsForValue().set("count", redisCount);
 
-        String data = this.resultTemplate.replace("#databaseCount#", databaseCount)
-                                        .replace("#redisCount#", redisCount.toString());
-        return result.replace("#code#", "101")
-                .replace("#message#", "ok")
-                .replace("#data#", data);
+        return result("101", "ok", data(databaseCount, redisCount));
+    }
+
+    private String result(String code, String message, String data) {
+        String result = "{\"code\": \"#code#\", \"message\": \"#message#\", \"data\": \"#data#\"}";
+
+        return result.replace("#code#", code)
+                    .replace("#message#", message)
+                    .replace("#data#", data);
+    }
+
+    private String data(String databaseCount, String redisCount) {
+        String data = "{\"content\": \"hello, spring boot.<br>database count: <strong>#databaseCount#</strong><br>redis count: <strong>#redisCount#</strong>\"}";
+
+        return data.replace("#databaseCount#", databaseCount)
+                .replace("#redisCount#", redisCount);
     }
 
 }
