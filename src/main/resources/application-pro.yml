@@ -1,0 +1,21 @@
+spring:
+  datasource:
+      druid:
+          username: mdf
+          password: modefang
+          url: jdbc:mysql://35.187.159.0:3306/demo?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+  redis:
+      database: 0
+      host: 35.187.159.0
+      port: 6379
+      timeout: 3000
+      jedis:
+        pool:
+          max-wait: 200
+          max-active: 200
+          max-idle: 8
+          min-idle: 0
+server:
+  port: 8080
+  tomcat:
+    max-connections: 500
