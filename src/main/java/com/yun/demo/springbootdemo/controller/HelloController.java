@@ -20,11 +20,8 @@ public class HelloController {
         String sql = "select count(*) from count";
         String databaseCount =  jdbcTemplate.queryForObject(sql, String.class);
 
-        stringRedisTemplate.opsForValue().setIfAbsent("count:","1");
+        stringRedisTemplate.opsForValue().setIfAbsent("count","1");
         String redisCount = stringRedisTemplate.opsForValue().get("count");
-        if(redisCount == null) {
-            return result("201", "redis value is null!", "-1");
-        }
 
         return result("101", "ok", data(databaseCount, redisCount));
     }
@@ -38,7 +35,7 @@ public class HelloController {
         String countSql = "select count(*) from count";
         String databaseCount =  jdbcTemplate.queryForObject(countSql, String.class);
 
-        stringRedisTemplate.opsForValue().setIfAbsent("count:","1");
+        stringRedisTemplate.opsForValue().setIfAbsent("count","1");
         Integer count = Integer.valueOf(stringRedisTemplate.opsForValue().get("count"));
         String redisCount = (++count).toString();
         stringRedisTemplate.opsForValue().set("count", redisCount);
@@ -47,7 +44,7 @@ public class HelloController {
     }
 
     private String result(String code, String message, String data) {
-        String result = "{\"code\": \"#code#\", \"message\": \"#message#\", \"data\": \"#data#\"}";
+        String result = "{\"code\": \"#code#\", \"message\": \"#message#\", \"data\": #data#}";
 
         return result.replace("#code#", code)
                     .replace("#message#", message)
