@@ -22,9 +22,6 @@ public class HelloController {
 
         stringRedisTemplate.opsForValue().setIfAbsent("count","1");
         String redisCount = stringRedisTemplate.opsForValue().get("count");
-        if(redisCount == null) {
-            return result("201", "redis value is null!", "-1");
-        }
 
         return result("101", "ok", data(databaseCount, redisCount));
     }
@@ -47,7 +44,7 @@ public class HelloController {
     }
 
     private String result(String code, String message, String data) {
-        String result = "{\"code\": \"#code#\", \"message\": \"#message#\", \"data\": \"#data#\"}";
+        String result = "{\"code\": \"#code#\", \"message\": \"#message#\", \"data\": #data#}";
 
         return result.replace("#code#", code)
                     .replace("#message#", message)
