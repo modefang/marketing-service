@@ -9,14 +9,11 @@ spring:
     database: 0
     host: 35.187.159.0
     port: 6379
-    timeout: 3000
-    jedis:
-      pool:
-        max-wait: 200
-        max-active: 200
-        max-idle: 8
-        min-idle: 0
+  rabbitmq:
+    host: 35.187.159.0
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
 server:
   port: 8080
-  tomcat:
-    max-connections: 500

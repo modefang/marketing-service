@@ -20,3 +20,16 @@ spring:
       testWhileIdle: true
       testOnBorrow: false
       testOnReturn: false
+  redis:
+    timeout: 3000
+    jedis:
+      pool:
+        max-wait: 200
+        max-active: 200
+        max-idle: 8
+        min-idle: 0
+  rabbitmq:
+    publisher-confirms: true
+server:
+  tomcat:
+    max-connections: 500
