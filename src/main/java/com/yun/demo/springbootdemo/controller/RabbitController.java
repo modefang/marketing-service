@@ -14,7 +14,9 @@ public class RabbitController {
 
     @RequestMapping("/basic")
     public String basic() {
-        helloFirstPublisher.sendBasic();
+        for (int i = 0; i < 1; i++) {
+            helloFirstPublisher.sendBasic();
+        }
         return "success";
     }
 

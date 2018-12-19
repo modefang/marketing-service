@@ -13,7 +13,7 @@ spring:
     host: 35.187.159.0
     port: 5672
     virtual-host: /
-    username: guest
-    password: guest
+    username: admin
+    password: modefang
 server:
   port: 8080

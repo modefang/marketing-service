@@ -1,6 +1,6 @@
 package com.yun.demo.springbootdemo.rabbit;
 
-import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 public class HelloFirstPublisher {
 
     @Autowired
-    private AmqpTemplate rabbitTemplate;
+    private RabbitTemplate rabbitTemplate;
 
     public void sendBasic() {
         String message = "hello, this is first publisher!";
-        System.out.println("HelloFirstPublisher : " + message);
-        this.rabbitTemplate.convertAndSend("helloQueue", message);
+        this.rabbitTemplate.convertAndSend("hello", message);
+        System.out.println("#1 HelloFirstPublisher: " + message);
     }
 
 }
