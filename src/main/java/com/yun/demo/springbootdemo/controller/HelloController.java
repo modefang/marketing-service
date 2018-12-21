@@ -1,11 +1,15 @@
 package com.yun.demo.springbootdemo.controller;
 
+import com.yun.demo.springbootdemo.constant.ResponseEnum;
+import com.yun.demo.springbootdemo.pojo.ResponseMessage;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class HelloController {
@@ -17,21 +21,21 @@ public class HelloController {
     private StringRedisTemplate stringRedisTemplate;
 
     @GetMapping("/hello")
-    public String hello() {
+    public ResponseMessage hello() {
         String sql = "select count(*) from count";
         String databaseCount =  jdbcTemplate.queryForObject(sql, String.class);
 
         stringRedisTemplate.opsForValue().setIfAbsent("count","1");
         String redisCount = stringRedisTemplate.opsForValue().get("count");
 
-        return result("101", "ok", data(databaseCount, redisCount));
+        return new ResponseMessage(ResponseEnum.SUCCESS, countToMap(databaseCount, redisCount));
     }
 
     @GetMapping("/count/add")
-    public String addCount() {
+    public ResponseMessage addCount() {
         String sql = "insert into count (`time`) value (now())";
         if(jdbcTemplate.update(sql) < 1) {
-            return result("201", "insert into database error!", "-1");
+            return new ResponseMessage(ResponseEnum.ERROR_DATABASE_INSERT);
         }
         String countSql = "select count(*) from count";
         String databaseCount =  jdbcTemplate.queryForObject(countSql, String.class);
@@ -41,15 +45,14 @@ public class HelloController {
         String redisCount = (++count).toString();
         stringRedisTemplate.opsForValue().set("count", redisCount);
 
-        return result("101", "ok", data(databaseCount, redisCount));
+        return new ResponseMessage(ResponseEnum.SUCCESS, countToMap(databaseCount, redisCount));
     }
 
-    private String result(String code, String message, String data) {
-        String result = "{\"code\": \"#code#\", \"message\": \"#message#\", \"data\": #data#}";
-
-        return result.replace("#code#", code)
-                    .replace("#message#", message)
-                    .replace("#data#", data);
+    private Map<String, Object> countToMap(String databaseCount, String redisCount) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("databaseCount", databaseCount);
+        data.put("redisCount", redisCount);
+        return data;
     }
 
     private String data(String databaseCount, String redisCount) {
