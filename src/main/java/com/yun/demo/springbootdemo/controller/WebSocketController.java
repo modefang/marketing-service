@@ -2,6 +2,10 @@ package com.yun.demo.springbootdemo.controller;
 
 import com.yun.demo.springbootdemo.constant.ResponseEnum;
 import com.yun.demo.springbootdemo.pojo.ResponseMessage;
+import com.yun.demo.springbootdemo.rabbit.HelloCallbackPublisher;
+import com.yun.demo.springbootdemo.rabbit.HelloFirstPublisher;
+import com.yun.demo.springbootdemo.rabbit.HelloThirdPublisher;
+import com.yun.demo.springbootdemo.rabbit.helloSecondPublisher;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -16,6 +20,18 @@ public class WebSocketController {
     @Resource
     private SimpMessagingTemplate simpMessagingTemplate;
 
+    @Resource
+    private HelloFirstPublisher helloFirstPublisher;
+
+    @Resource
+    private helloSecondPublisher helloSecondPublisher;
+
+    @Resource
+    private HelloThirdPublisher helloThirdPublisher;
+
+    @Resource
+    private HelloCallbackPublisher helloCallbackPublisher;
+
     @MessageMapping("/sendMessage")
     @SendTo("/topic/reply")
     public ResponseMessage broadcast(String message) {
@@ -23,6 +39,11 @@ public class WebSocketController {
             return new ResponseMessage(ResponseEnum.ERROR, -1);
         }
         return new ResponseMessage(ResponseEnum.SUCCESS, message);
+    }
+
+    @MessageMapping("/hello")
+    public void hello() {
+        helloFirstPublisher.sendBasic();
     }
 
     @MessageExceptionHandler
