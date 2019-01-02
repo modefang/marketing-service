@@ -29,16 +29,23 @@ public class HelloCallbackPublisher implements RabbitTemplate.ConfirmCallback {
         String message = "[id: " + id + "] This message has callback.";
         CorrelationData correlationData = new CorrelationData(id);
         this.rabbitTemplate.convertAndSend(exchange, routingKey, message, correlationData);
-        System.out.println(this.MESSAGE_TITLE + message);
+
+        String print = this.MESSAGE_TITLE + message;
+        this.simpMessagingTemplate.convertAndSend("/topic/sendCallback", print);
+        System.out.println(print);
     }
 
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+        String message;
         if(ack) {
-            System.out.println("[id: " + correlationData.getId() + "] callback success.");
+            message = "[id: " + correlationData.getId() + "] callback success.";
         } else {
-            System.out.println("[id: " + correlationData.getId() + "] callback error: " + cause + ".");
+            message = "[id: " + correlationData.getId() + "] callback error: " + cause + ".";
         }
+        String print = this.MESSAGE_TITLE + message;
+        this.simpMessagingTemplate.convertAndSend("/topic/sendCallback", print);
+        System.out.println(print);
     }
 
 }

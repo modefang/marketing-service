@@ -38,6 +38,15 @@ public class GlobalPublisher {
         System.out.println(print);
     }
 
+    public void sendManyToMany(String title) {
+        String message = "This message was sent by queue.manyToMany.";
+        rabbitTemplate.convertAndSend("manyToMany", message);
+
+        String print = title + message;
+        simpMessagingTemplate.convertAndSend("/topic/sendManyToMany", print);
+        System.out.println(print);
+    }
+
     public void sendTopic(String title) {
         String message = "This message was sent by topic.message.";
         this.rabbitTemplate.convertAndSend("exchange", "topic.message", message);

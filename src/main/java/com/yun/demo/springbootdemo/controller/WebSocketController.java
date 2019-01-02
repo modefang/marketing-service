@@ -9,16 +9,12 @@ import com.yun.demo.springbootdemo.rabbit.helloSecondPublisher;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
 @RestController
 public class WebSocketController {
-
-    @Resource
-    private SimpMessagingTemplate simpMessagingTemplate;
 
     @Resource
     private HelloFirstPublisher helloFirstPublisher;
@@ -31,6 +27,14 @@ public class WebSocketController {
 
     @Resource
     private HelloCallbackPublisher helloCallbackPublisher;
+
+    @MessageExceptionHandler
+    @SendTo("/topic/error")
+    public ResponseMessage handleException(Throwable exception) {
+        String message = exception.getMessage();
+        System.out.println(message);
+        return new ResponseMessage(ResponseEnum.ERROR, message);
+    }
 
     @MessageMapping("/sendMessage")
     @SendTo("/topic/reply")
@@ -46,10 +50,31 @@ public class WebSocketController {
         helloFirstPublisher.sendBasic();
     }
 
-    @MessageExceptionHandler
-    public ResponseMessage handleException(Throwable exception) {
-        simpMessagingTemplate.convertAndSend("/websocket/error", exception.getMessage());
-        return new ResponseMessage(ResponseEnum.ERROR, -1);
+    @MessageMapping("/object")
+    public void object() {
+        helloFirstPublisher.sendObject();
+    }
+
+    @MessageMapping("/manyToMany")
+    public void manyToMany() {
+        helloFirstPublisher.sendManyToMany();
+        helloSecondPublisher.sendManyToMany();
+        helloThirdPublisher.sendManyToMany();
+    }
+
+    @MessageMapping("/topic")
+    public void topic() {
+        helloFirstPublisher.sendTopic();
+    }
+
+    @MessageMapping("/fanout")
+    public void fanout() {
+        helloFirstPublisher.sendFanout();
+    }
+
+    @MessageMapping("/callback")
+    public void callback() {
+        helloCallbackPublisher.send("exchange", "topic.callback.message");
     }
 
 }

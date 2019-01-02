@@ -76,7 +76,7 @@ public class RabbitController {
     public String callback(Integer num) {
         num = num == null || num < 1 ? 1 : num;
         for (int i = 0; i < num; i++) {
-            helloCallbackPublisher.send("exchange", "topic.messages");
+            helloCallbackPublisher.send("exchange", "topic.callback.hello");
         }
         return "success";
     }

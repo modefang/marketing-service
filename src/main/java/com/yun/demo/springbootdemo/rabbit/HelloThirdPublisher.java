@@ -15,4 +15,8 @@ public class HelloThirdPublisher {
         globalPublisher.sendBasic(this.MESSAGE_TITLE);
     }
 
+    public void sendManyToMany() {
+        globalPublisher.sendManyToMany(this.MESSAGE_TITLE);
+    }
+
 }

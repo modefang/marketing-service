@@ -19,6 +19,10 @@ public class HelloFirstPublisher {
         globalPublisher.sendObject(this.MESSAGE_TITLE);
     }
 
+    public void sendManyToMany() {
+        globalPublisher.sendManyToMany(this.MESSAGE_TITLE);
+    }
+
     public void sendTopic() {
         globalPublisher.sendTopic(this.MESSAGE_TITLE);
     }

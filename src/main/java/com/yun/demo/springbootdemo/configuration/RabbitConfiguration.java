@@ -23,6 +23,11 @@ public class RabbitConfiguration {
         return new Queue("object");
     }
 
+    @Bean
+    public Queue manyToManyQueue() {
+        return new Queue("manyToMany");
+    }
+
     // topic Exchange
     @Bean
     public Queue queueMessage() {
@@ -32,6 +37,11 @@ public class RabbitConfiguration {
     @Bean
     public Queue queueMessages() {
         return new Queue("topic.messages");
+    }
+
+    @Bean
+    public Queue queueCallbackMessage() {
+        return new Queue("topic.callback.message");
     }
     // topic Exchange
 
@@ -74,7 +84,13 @@ public class RabbitConfiguration {
     // 将队列topic.messages与exchange绑定，binding_key为topic.#,模糊匹配
     @Bean
     Binding bindingExchangeMessages(Queue queueMessages, TopicExchange exchange) {
-        return BindingBuilder.bind(queueMessages).to(exchange).with("topic.#");
+        return BindingBuilder.bind(queueMessages).to(exchange).with("topic.*");
+    }
+
+    // 将队列topic.messages与exchange绑定，binding_key为topic.#,模糊匹配
+    @Bean
+    Binding bindingExchangeCallback(Queue queueCallbackMessage, TopicExchange exchange) {
+        return BindingBuilder.bind(queueCallbackMessage).to(exchange).with("topic.callback.#");
     }
 
     @Bean
