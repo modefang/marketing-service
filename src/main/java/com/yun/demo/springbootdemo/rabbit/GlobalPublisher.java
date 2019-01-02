@@ -3,11 +3,13 @@ package com.yun.demo.springbootdemo.rabbit;
 import com.yun.demo.springbootdemo.Util.JsonUtil;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
 import rabbit.pojo.UserRabbitPojo;
 
 import javax.annotation.Resource;
 import java.util.UUID;
 
+@Component
 public class GlobalPublisher {
 
     @Resource
