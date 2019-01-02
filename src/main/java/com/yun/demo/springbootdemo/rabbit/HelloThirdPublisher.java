@@ -2,12 +2,17 @@ package com.yun.demo.springbootdemo.rabbit;
 
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 @Component
 public class HelloThirdPublisher {
     private final String MESSAGE_TITLE = "#3 HelloThirdPublisher: ";
 
+    @Resource
+    private GlobalPublisher globalPublisher;
+
     public void sendBasic() {
-        GlobalPublisher.sendBasic(this.MESSAGE_TITLE);
+        globalPublisher.sendBasic(this.MESSAGE_TITLE);
     }
 
 }
