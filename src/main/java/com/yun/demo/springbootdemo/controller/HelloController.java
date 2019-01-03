@@ -55,11 +55,4 @@ public class HelloController {
         return data;
     }
 
-    private String data(String databaseCount, String redisCount) {
-        String data = "{\"content\": \"hello, spring boot.<br>database count: <strong>#databaseCount#</strong><br>redis count: <strong>#redisCount#</strong>\"}";
-
-        return data.replace("#databaseCount#", databaseCount)
-                .replace("#redisCount#", redisCount);
-    }
-
 }
