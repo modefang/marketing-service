@@ -5,11 +5,11 @@ public enum ResponseEnum {
     SUCCESS("00001", "success"),
 
     // 数据校验不通过时返回的状态
-    WRONG_ID("10001", "错误的ID"),
+    ERROR_PARAMETERS_IS_NULL("10001", "Parameters cannot be null."),
 
     // 运行失败时返回的状态
     ERROR("20001", "error"),
-    ERROR_DATABASE_INSERT("20002", "insert into database error")
+    ERROR_INSERT("20002", "insert error")
     ;
 
     private String code;

@@ -1,7 +1,7 @@
 package com.yun.demo.springbootdemo.controller;
 
 import com.yun.demo.springbootdemo.constant.ResponseEnum;
-import com.yun.demo.springbootdemo.pojo.ResponseMessage;
+import com.yun.demo.springbootdemo.pojo.ResponsePojo;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,21 +21,21 @@ public class HelloController {
     private StringRedisTemplate stringRedisTemplate;
 
     @GetMapping("/hello")
-    public ResponseMessage hello() {
+    public ResponsePojo hello() {
         String sql = "select count(*) from count";
         String databaseCount =  jdbcTemplate.queryForObject(sql, String.class);
 
         stringRedisTemplate.opsForValue().setIfAbsent("count","1");
         String redisCount = stringRedisTemplate.opsForValue().get("count");
 
-        return new ResponseMessage(ResponseEnum.SUCCESS, countToMap(databaseCount, redisCount));
+        return new ResponsePojo(ResponseEnum.SUCCESS, countToMap(databaseCount, redisCount));
     }
 
     @GetMapping("/count/add")
-    public ResponseMessage addCount() {
+    public ResponsePojo addCount() {
         String sql = "insert into count (`time`) value (now())";
         if(jdbcTemplate.update(sql) < 1) {
-            return new ResponseMessage(ResponseEnum.ERROR_DATABASE_INSERT);
+            return new ResponsePojo(ResponseEnum.ERROR_INSERT);
         }
         String countSql = "select count(*) from count";
         String databaseCount =  jdbcTemplate.queryForObject(countSql, String.class);
@@ -45,7 +45,7 @@ public class HelloController {
         String redisCount = (++count).toString();
         stringRedisTemplate.opsForValue().set("count", redisCount);
 
-        return new ResponseMessage(ResponseEnum.SUCCESS, countToMap(databaseCount, redisCount));
+        return new ResponsePojo(ResponseEnum.SUCCESS, countToMap(databaseCount, redisCount));
     }
 
     private Map<String, Object> countToMap(String databaseCount, String redisCount) {

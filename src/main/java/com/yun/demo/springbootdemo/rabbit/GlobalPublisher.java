@@ -1,6 +1,6 @@
 package com.yun.demo.springbootdemo.rabbit;
 
-import com.yun.demo.springbootdemo.Util.JsonUtil;
+import com.yun.demo.springbootdemo.util.JsonUtil;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;

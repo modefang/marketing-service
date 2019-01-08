@@ -1,4 +1,4 @@
-package com.yun.demo.springbootdemo.Util;
+package com.yun.demo.springbootdemo.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
