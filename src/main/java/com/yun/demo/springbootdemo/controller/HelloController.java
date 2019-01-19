@@ -1,5 +1,6 @@
 package com.yun.demo.springbootdemo.controller;
 
+import com.yun.demo.springbootdemo.annotation.LimitRequest;
 import com.yun.demo.springbootdemo.constant.ResponseEnum;
 import com.yun.demo.springbootdemo.pojo.ResponsePojo;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -20,6 +21,7 @@ public class HelloController {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+    @LimitRequest(times = 10)
     @GetMapping("/hello")
     public ResponsePojo hello() {
         String sql = "select count(*) from count";

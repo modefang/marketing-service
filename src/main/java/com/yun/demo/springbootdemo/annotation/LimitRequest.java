@@ -1,6 +1,6 @@
 package com.yun.demo.springbootdemo.annotation;
 
-import com.yun.demo.springbootdemo.constant.LimitIPConstant;
+import com.yun.demo.springbootdemo.constant.LimitRequestConstant;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
@@ -10,10 +10,10 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Documented
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public @interface LimitIP {
+public @interface LimitRequest {
 
-    int count() default LimitIPConstant.count;
+    long times() default LimitRequestConstant.TIMES;
 
-    int second() default LimitIPConstant.second;
+    long seconds() default LimitRequestConstant.SECONDS;
 
 }

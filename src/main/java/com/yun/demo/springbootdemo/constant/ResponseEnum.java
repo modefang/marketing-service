@@ -5,7 +5,8 @@ public enum ResponseEnum {
     SUCCESS("00001", "success"),
 
     // 数据校验不通过时返回的状态
-    ERROR_PARAMETERS_IS_NULL("10001", "Parameters cannot be null."),
+    ERROR_REQUEST_EXCEEDS_LIMIT("10001", "Request exceeds limit."),
+    ERROR_PARAMETERS_IS_NULL("10002", "Parameters cannot be null."),
 
     // 运行失败时返回的状态
     ERROR("20001", "error"),
