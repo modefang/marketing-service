@@ -1,6 +1,6 @@
 package com.yun.demo.springbootdemo.rabbit;
 
-import com.yun.demo.springbootdemo.util.JsonUtil;
+import com.yun.demo.springbootdemo.util.JsonUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,7 @@ public class GlobalPublisher {
         user.setName("modefang");
         this.rabbitTemplate.convertAndSend("object", user);
 
-        String print = title + JsonUtil.objectToJson(user);
+        String print = title + JsonUtils.objectToJson(user);
         this.simpMessagingTemplate.convertAndSend("/topic/sendObject", print);
         System.out.println(print);
     }

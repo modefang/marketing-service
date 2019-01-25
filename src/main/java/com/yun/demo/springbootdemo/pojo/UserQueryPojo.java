@@ -7,7 +7,7 @@ public class UserQueryPojo {
 
     private String id;
 
-    private String name;
+    private String username;
 
     private String updateTimeStart;
 

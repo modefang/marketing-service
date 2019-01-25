@@ -17,6 +17,11 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
+    public UserEntity loadUserByUsername(String username) {
+        return userDao.loadUserByUsername(username);
+    }
+
+    @Override
     public void saveUser(UserEntity user) {
         userDao.saveUser(user);
     }

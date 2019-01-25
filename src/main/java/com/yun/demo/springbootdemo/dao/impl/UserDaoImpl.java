@@ -5,7 +5,7 @@ import com.yun.demo.springbootdemo.entity.UserEntity;
 import com.yun.demo.springbootdemo.pojo.PagePojo;
 import com.yun.demo.springbootdemo.pojo.PaginationPojo;
 import com.yun.demo.springbootdemo.pojo.UserQueryPojo;
-import com.yun.demo.springbootdemo.util.StrUtil;
+import com.yun.demo.springbootdemo.util.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -24,6 +24,12 @@ public class UserDaoImpl implements UserDao {
     private MongoTemplate mongoTemplate;
 
     @Override
+    public UserEntity loadUserByUsername(String username) {
+        Query query = new Query(Criteria.where("username").is(username));
+        return this.mongoTemplate.findOne(query, UserEntity.class);
+    }
+
+    @Override
     public void saveUser(UserEntity user) {
         this.mongoTemplate.save(user);
     }
@@ -31,22 +37,22 @@ public class UserDaoImpl implements UserDao {
     @Override
     public PaginationPojo findUsers(UserQueryPojo condition, PagePojo page) {
         Query query = new Query();
-        if(StrUtil.isNotEmpty(condition.getId())) {
+        if(StringUtils.isNotEmpty(condition.getId())) {
             query.addCriteria(Criteria.where("id").is(condition.getId()));
         }
-        if(StrUtil.isNotEmpty(condition.getName())) {
-            query.addCriteria(Criteria.where("name").regex(".*" + condition.getName() + ".*"));
+        if(StringUtils.isNotEmpty(condition.getUsername())) {
+            query.addCriteria(Criteria.where("username").regex(".*" + condition.getUsername() + ".*"));
         }
-        if(StrUtil.isNotEmpty(condition.getUpdateTimeStart())) {
+        if(StringUtils.isNotEmpty(condition.getUpdateTimeStart())) {
             query.addCriteria(Criteria.where("updateTime").gte(condition.getUpdateTimeStart()));
         }
-        if(StrUtil.isNotEmpty(condition.getUpdateTimeEnd())) {
+        if(StringUtils.isNotEmpty(condition.getUpdateTimeEnd())) {
             query.addCriteria(Criteria.where("updateTime").lte(condition.getUpdateTimeEnd()));
         }
-        if(StrUtil.isNotEmpty(condition.getCreateTimeStart())) {
+        if(StringUtils.isNotEmpty(condition.getCreateTimeStart())) {
             query.addCriteria(Criteria.where("createTime").gte(condition.getCreateTimeStart()));
         }
-        if(StrUtil.isNotEmpty(condition.getCreateTimeEnd())) {
+        if(StringUtils.isNotEmpty(condition.getCreateTimeEnd())) {
             query.addCriteria(Criteria.where("createTime").lte(condition.getCreateTimeEnd()));
         }
 
@@ -59,7 +65,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void updateUser(UserEntity user) {
         Query query = new Query(Criteria.where("id").is(user.getId()));
-        Update update = new Update().set("name", user.getName()).set("updateTime", new Date());
+        Update update = new Update().set("username", user.getUsername()).set("password", user.getPassword()).set("updateTime", new Date());
         this.mongoTemplate.updateFirst(query, update, UserEntity.class);
     }
 

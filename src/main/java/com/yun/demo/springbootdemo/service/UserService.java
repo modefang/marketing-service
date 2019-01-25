@@ -8,6 +8,12 @@ import com.yun.demo.springbootdemo.pojo.UserQueryPojo;
 public interface UserService {
 
     /**
+     * 根据用户名获取用户数据
+     * @param username 用户名
+     */
+    UserEntity loadUserByUsername(String username);
+
+    /**
      * 新增用户
      * @param user 用户
      */

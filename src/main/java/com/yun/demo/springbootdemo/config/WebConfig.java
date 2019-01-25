@@ -1,4 +1,4 @@
-package com.yun.demo.springbootdemo.configuration;
+package com.yun.demo.springbootdemo.config;
 
 import com.yun.demo.springbootdemo.interceptor.LimitInterceptor;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.annotation.Resource;
 
 @Configuration
-public class WebConfiguration implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
 
     @Resource
     private LimitInterceptor limitInterceptor;

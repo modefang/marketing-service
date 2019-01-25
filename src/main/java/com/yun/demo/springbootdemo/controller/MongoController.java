@@ -7,7 +7,8 @@ import com.yun.demo.springbootdemo.pojo.PaginationPojo;
 import com.yun.demo.springbootdemo.pojo.ResponsePojo;
 import com.yun.demo.springbootdemo.pojo.UserQueryPojo;
 import com.yun.demo.springbootdemo.service.UserService;
-import com.yun.demo.springbootdemo.util.StrUtil;
+import com.yun.demo.springbootdemo.util.StringUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,10 +25,11 @@ public class MongoController {
 
     @RequestMapping("/saveUser")
     public ResponsePojo saveUser(UserEntity user) {
-        if(StrUtil.isEmpty(user.getName())) {
+        if(StringUtils.isEmpty(user.getUsername())) {
             return new ResponsePojo(ResponseEnum.ERROR_PARAMETERS_IS_NULL, user);
         }
         user.setId(UUID.randomUUID().toString());
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setUpdateTime(new Date());
         user.setCreateTime(new Date());
         userService.saveUser(user);
@@ -43,7 +45,7 @@ public class MongoController {
 
     @RequestMapping("/updateUser")
     public ResponsePojo updateUser(UserEntity user) {
-        if(StrUtil.isEmpty(user.getId(), user.getName())) {
+        if(StringUtils.isEmpty(user.getId(), user.getUsername())) {
             return new ResponsePojo(ResponseEnum.ERROR_PARAMETERS_IS_NULL, user);
         }
         userService.updateUser(user);
@@ -52,7 +54,7 @@ public class MongoController {
 
     @RequestMapping("/deleteUser")
     public ResponsePojo deleteUser(String id) {
-        if(StrUtil.isEmpty(id)) {
+        if(StringUtils.isEmpty(id)) {
             return new ResponsePojo(ResponseEnum.ERROR_PARAMETERS_IS_NULL, id);
         }
         userService.deleteUserById(id);

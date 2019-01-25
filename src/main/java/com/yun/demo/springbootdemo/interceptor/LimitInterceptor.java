@@ -4,7 +4,7 @@ import com.yun.demo.springbootdemo.annotation.LimitRequest;
 import com.yun.demo.springbootdemo.constant.LimitRequestConstant;
 import com.yun.demo.springbootdemo.constant.ResponseEnum;
 import com.yun.demo.springbootdemo.pojo.ResponsePojo;
-import com.yun.demo.springbootdemo.util.CommonUtil;
+import com.yun.demo.springbootdemo.util.CommonUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -33,7 +33,7 @@ public class LimitInterceptor implements HandlerInterceptor {
             // 校验请求次数是否超出限制
             return limitRequest(request, response, handler);
         } catch (Exception e) {
-            CommonUtil.sendJsonMessage(response, new ResponsePojo(ResponseEnum.ERROR, -1));
+            CommonUtils.sendJsonMessage(response, new ResponsePojo(ResponseEnum.ERROR, -1));
             return false;
         }
     }
@@ -64,7 +64,7 @@ public class LimitInterceptor implements HandlerInterceptor {
             throw new Exception();
         }
         if (current > times) {
-            CommonUtil.sendJsonMessage(response, new ResponsePojo(ResponseEnum.ERROR_REQUEST_EXCEEDS_LIMIT, -1));
+            CommonUtils.sendJsonMessage(response, new ResponsePojo(ResponseEnum.ERROR_REQUEST_EXCEEDS_LIMIT, -1));
             return false;
         }
         // 如果该key不存在，则从0开始加1，最后返回1

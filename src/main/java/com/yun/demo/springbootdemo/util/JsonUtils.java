@@ -3,7 +3,7 @@ package com.yun.demo.springbootdemo.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JsonUtil {
+public class JsonUtils {
 
     public static String objectToJson(Object object) {
         try {

@@ -1,4 +1,4 @@
-package com.yun.demo.springbootdemo.configuration;
+package com.yun.demo.springbootdemo.config;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
-public class RabbitConfiguration {
+public class RabbitConfig {
 
     @Bean
     public Queue helloQueue() {
@@ -108,7 +108,7 @@ public class RabbitConfiguration {
         return BindingBuilder.bind(CMessage).to(fanoutExchange);
     }
 
-    // rabbit basic configuration
+    // rabbit basic config
     @Value("${spring.rabbitmq.host}")
     private String host;
 
@@ -144,6 +144,6 @@ public class RabbitConfiguration {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
         return template;
     }
-    // rabbit basic configuration
+    // rabbit basic config
 
 }

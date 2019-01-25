@@ -1,6 +1,6 @@
 package com.yun.demo.springbootdemo.util;
 
-public class StrUtil {
+public class StringUtils {
 
     public static boolean isEmpty(String... args) {
         for (String s : args) {
