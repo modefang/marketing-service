@@ -14,6 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class AuthController {
 
+    @RequestMapping("/auth/code")
+    public String code(String code){
+        return "code: " + code;
+    }
+
     @RequestMapping("/auth/add")
     public ResponsePojo add() {
         return new ResponsePojo(ResponseEnum.SUCCESS, "add page");
