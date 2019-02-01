@@ -35,15 +35,10 @@ server:
     max-connections: 500
 security:
   oauth2:
-#    sso:
-#      loginPath: /login
     client:
       clientId: mo
       clientSecret: modefang
-      accessTokenUri: http://localhost:9080/oauth/token
-      userAuthorizationUri: http://localhost:9080/oauth/authorize
-    authorization:
-      check-token-access: http://localhost:9080/oauth/check_token
+      access-token-uri: http://localhost:9080/oauth/token
+      user-authorization-uri: http://localhost:9080/oauth/authorize
     resource:
-      userInfoUri: http://localhost:9080/user
-      preferTokenInfo: false
+      token-info-uri: http://localhost:9080/oauth/check_token
