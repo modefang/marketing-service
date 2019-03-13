@@ -33,12 +33,3 @@ spring:
 server:
   tomcat:
     max-connections: 500
-security:
-  oauth2:
-    client:
-      clientId: mo
-      clientSecret: modefang
-      access-token-uri: http://localhost:9080/oauth/token
-      user-authorization-uri: http://localhost:9080/oauth/authorize
-    resource:
-      token-info-uri: http://localhost:9080/oauth/check_token
