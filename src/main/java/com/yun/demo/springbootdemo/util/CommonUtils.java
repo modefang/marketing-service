@@ -1,5 +1,7 @@
 package com.yun.demo.springbootdemo.util;
 
+import com.yun.demo.springbootdemo.constant.ResponseEnum;
+import com.yun.demo.springbootdemo.exception.GlobalDefultException;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,12 +13,16 @@ public class CommonUtils {
     /**
      * 返回json数据
      */
-    public static void sendJsonMessage(HttpServletResponse response, Object object) throws Exception {
-        response.setContentType("application/json; charset=utf-8");
-        PrintWriter writer = response.getWriter();
-        writer.print(JsonUtils.objectToJson(object));
-        writer.close();
-        response.flushBuffer();
+    public static void sendJsonMessage(HttpServletResponse response, Object object) {
+        try {
+            response.setContentType("application/json; charset=utf-8");
+            PrintWriter writer = response.getWriter();
+            writer.print(JsonUtils.objectToJson(object));
+            writer.close();
+            response.flushBuffer();
+        } catch (Exception e) {
+            throw new GlobalDefultException(ResponseEnum.ERROR);
+        }
     }
 
     /**

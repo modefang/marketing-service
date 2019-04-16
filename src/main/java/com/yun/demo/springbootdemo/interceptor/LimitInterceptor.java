@@ -3,6 +3,7 @@ package com.yun.demo.springbootdemo.interceptor;
 import com.yun.demo.springbootdemo.annotation.LimitRequest;
 import com.yun.demo.springbootdemo.constant.LimitRequestConstant;
 import com.yun.demo.springbootdemo.constant.ResponseEnum;
+import com.yun.demo.springbootdemo.exception.GlobalDefultException;
 import com.yun.demo.springbootdemo.pojo.ResponsePojo;
 import com.yun.demo.springbootdemo.util.CommonUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -24,24 +25,19 @@ public class LimitInterceptor implements HandlerInterceptor {
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 过滤资源请求
         if (handler instanceof ResourceHttpRequestHandler) {
             return true;
         }
-        try {
-            // 校验请求次数是否超出限制
-            return limitRequest(request, response, handler);
-        } catch (Exception e) {
-            CommonUtils.sendJsonMessage(response, new ResponsePojo(ResponseEnum.ERROR, -1));
-            return false;
-        }
+        // 校验请求次数是否超出限制
+        return limitRequest(request, handler);
     }
 
     /**
      * 校验请求次数是否超出限制
      */
-    private boolean limitRequest(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    private boolean limitRequest(HttpServletRequest request, Object handler) {
         // 初始化参数
         long times = LimitRequestConstant.TIMES;
         long seconds = LimitRequestConstant.SECONDS;
@@ -61,11 +57,10 @@ public class LimitInterceptor implements HandlerInterceptor {
         // 设置在redis中的缓存，累加1
         Long current = stringRedisTemplate.opsForValue().increment(redisKey);
         if (current == null) {
-            throw new Exception();
+            throw new GlobalDefultException(ResponseEnum.ERROR);
         }
         if (current > times) {
-            CommonUtils.sendJsonMessage(response, new ResponsePojo(ResponseEnum.ERROR_REQUEST_EXCEEDS_LIMIT, -1));
-            return false;
+            throw new GlobalDefultException(ResponseEnum.ERROR_REQUEST_EXCEEDS_LIMIT);
         }
         // 如果该key不存在，则从0开始加1，最后返回1
         if (current == 1) {
