@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+    <Properties>
+        <!-- 应用名称 -->
+        <Property name="APP_NAME" value="$${lower:${spring:spring.application.name}}"/>
+        <!-- 日志文件路径 -->
+        <Property name="LOG_HOME" value="./logs"/>
+        <!-- 日志打印配置 -->
+        <Property name="LOG_PATTERN"
+                  value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{%-5level} ${k8s:containerId:-} %style{%pid}{magenta} %X{trace.id} --- [%15.15t] %style{%-40.40logger{39}}{cyan}: %msg%n%throwable"/>
+    </Properties>
+
+    <Appenders>
+        <!--控制台日志，控制台输出 -->
+        <Console name="STDOUT">
+            <PatternLayout pattern="${LOG_PATTERN}" disableAnsi="false"/>
+        </Console>
+
+        <!-- dev 环境配置 -->
+        <SpringProfile name="dev">
+            <RollingRandomAccessFile name="rollingFileDebug" fileName="${LOG_HOME}/debug/${APP_NAME}-debug.log"
+                                     filePattern="${LOG_HOME}/debug/${APP_NAME}-debug.%d{yyyy-MM-dd}.%i.log"
+                                     immediateFlush="false" append="false">
+                <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+                <PatternLayout pattern="${LOG_PATTERN}"/>
+                <Policies>
+                    <!--默认一天一个文件-->
+                    <TimeBasedTriggeringPolicy/>
+                    <!--一天内大于size就单独分隔-->
+                    <SizeBasedTriggeringPolicy size="1GB"/>
+                </Policies>
+                <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->
+                <DefaultRolloverStrategy max="30"/>
+            </RollingRandomAccessFile>
+
+            <RollingRandomAccessFile name="rollingFileInfo" fileName="${LOG_HOME}/info/${APP_NAME}-info.log"
+                                     filePattern="${LOG_HOME}/info/${APP_NAME}-info.%d{yyyy-MM-dd}.%i.log"
+                                     immediateFlush="false" append="false">
+                <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+                <PatternLayout pattern="${LOG_PATTERN}"/>
+                <Policies>
+                    <!--默认一天一个文件-->
+                    <TimeBasedTriggeringPolicy/>
+                    <!--一天内大于size就单独分隔-->
+                    <SizeBasedTriggeringPolicy size="1GB"/>
+                </Policies>
+                <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->
+                <DefaultRolloverStrategy max="30"/>
+            </RollingRandomAccessFile>
+
+            <RollingRandomAccessFile name="rollingFileWarn" fileName="${LOG_HOME}/warn/${APP_NAME}-warn.log"
+                                     filePattern="${LOG_HOME}/warn/${APP_NAME}-warn.%d{yyyy-MM-dd}.%i.log"
+                                     immediateFlush="false" append="false">
+                <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+                <PatternLayout pattern="${LOG_PATTERN}"/>
+                <Policies>
+                    <!--默认一天一个文件-->
+                    <TimeBasedTriggeringPolicy/>
+                    <!--一天内大于size就单独分隔-->
+                    <SizeBasedTriggeringPolicy size="1GB"/>
+                </Policies>
+                <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->
+                <DefaultRolloverStrategy max="30"/>
+            </RollingRandomAccessFile>
+
+            <RollingRandomAccessFile name="rollingFileError" fileName="${LOG_HOME}/error/${APP_NAME}-error.log"
+                                     filePattern="${LOG_HOME}/error/${APP_NAME}-error.%d{yyyy-MM-dd}.%i.log"
+                                     immediateFlush="false" append="false">
+                <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+                <PatternLayout pattern="${LOG_PATTERN}"/>
+                <Policies>
+                    <!--默认一天一个文件-->
+                    <TimeBasedTriggeringPolicy/>
+                    <!--一天内大于size就单独分隔-->
+                    <SizeBasedTriggeringPolicy size="1GB"/>
+                </Policies>
+                <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->
+                <DefaultRolloverStrategy max="30"/>
+            </RollingRandomAccessFile>
+        </SpringProfile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.springframework" level="info"/>
+        <Logger name="org.mybatis" level="info"/>
+        <Logger name="com.baomidou.mybatisplus" level="warn"/>
+        <Logger name="com.xxl.job" level="warn"/>
+
+        <Root level="info" includeLocation="true">
+            <AppenderRef ref="STDOUT"/>
+
+            <!-- dev 环境配置 -->
+            <SpringProfile name="dev">
+                <AppenderRef ref="rollingFileError"/>
+                <AppenderRef ref="rollingFileWarn"/>
+                <AppenderRef ref="rollingFileInfo"/>
+                <AppenderRef ref="rollingFileDebug"/>
+            </SpringProfile>
+        </Root>
+    </Loggers>
+
+</Configuration>

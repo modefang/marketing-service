@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: mysqlpw
+    url: jdbc:mysql://127.0.0.1:55000/order_service?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+  redis:
+    host: 127.0.0.1
+    port: 55001
+    password: redispw

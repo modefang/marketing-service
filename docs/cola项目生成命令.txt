@@ -1,0 +1,1 @@
+mvn archetype:generate "-DgroupId=org.yun.marketingservice.orderservice" "-DartifactId=order-service" "-Dversion=1.0" "-Dpackage=org.yun.marketingservice.orderservice" "-DarchetypeArtifactId=cola-framework-archetype-web" "-DarchetypeGroupId=com.alibaba.cola" "-DarchetypeVersion=4.1.0"
