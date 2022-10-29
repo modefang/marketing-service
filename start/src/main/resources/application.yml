@@ -3,4 +3,4 @@ spring:
     name: order-service
   profiles:
     active: dev
-    include: druid
+    include: druid, mybatis-plus
